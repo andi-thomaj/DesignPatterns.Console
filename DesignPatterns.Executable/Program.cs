@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DesignPatterns.Console
+﻿namespace DesignPatterns.Executable
 {
     public class Program
     {

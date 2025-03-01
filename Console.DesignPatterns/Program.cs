@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace DesignPatterns.Console
+﻿namespace Console.DesignPatterns
 {
-    public class Program
+    internal class Program
     {
         static void Main(string[] args)
         {
