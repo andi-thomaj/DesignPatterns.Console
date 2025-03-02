@@ -1,6 +1,6 @@
-﻿namespace DesignPatterns.Executable
+﻿namespace Singleton
 {
-    public class Program
+    internal class Program
     {
         static void Main(string[] args)
         {
