@@ -1,10 +1,18 @@
 ﻿namespace AbstractFactory
 {
-    internal class Program
+    class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            Console.WriteLine("Hello, World!");
+            // Build a Tesla
+            ICarFactory teslaFactory = new TeslaFactory();
+            CarManufacturer teslaBuilder = new CarManufacturer(teslaFactory);
+            Console.WriteLine(teslaBuilder.AssembleCar());
+
+            // Build a Ford
+            ICarFactory fordFactory = new FordFactory();
+            CarManufacturer fordBuilder = new CarManufacturer(fordFactory);
+            Console.WriteLine(fordBuilder.AssembleCar());
         }
     }
 }

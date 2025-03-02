@@ -1,85 +1,62 @@
 ﻿namespace AbstractFactory
 {
-    public interface IShoppingCartPurchaseFactory
+    public interface IEngine
     {
-        IDiscountService CreateDiscountService();
-        IShippingCostsService CreateShippingCostsService();
+        string GetEngineType();
     }
 
-    public interface IDiscountService
+    public interface IChassis
     {
-        int DiscountPercentage { get; }
+        string GetChassisType();
     }
 
-    public class BelgiumDiscountService : IDiscountService
+    public class TeslaEngine : IEngine
     {
-        public int DiscountPercentage => 20;
+        public string GetEngineType() => "Tesla Electric Motor";
     }
 
-    public class FranceDiscountService : IDiscountService
+    public class TeslaChassis : IChassis
     {
-        public int DiscountPercentage => 10;
+        public string GetChassisType() => "Tesla Chassis";
     }
 
-    public interface IShippingCostsService
+    public class FordEngine : IEngine
     {
-        decimal ShippingCosts { get; }
+        public string GetEngineType() => "Ford V8 Engine";
     }
 
-    public class BelgiumShippingCostsService : IShippingCostsService
+    public class FordChassis : IChassis
     {
-        public decimal ShippingCosts => 20;
+        public string GetChassisType() => "Ford Chassis";
     }
 
-    public class FranceShippingCostsService : IShippingCostsService
+    public interface ICarFactory
     {
-        public decimal ShippingCosts => 25;
+        IEngine CreateEngine();
+        IChassis CreateChassis();
     }
 
-    public class BelgiumShoppingCartPurchaseFactory : IShoppingCartPurchaseFactory
+    public class TeslaFactory : ICarFactory
     {
-        public IDiscountService CreateDiscountService()
+        public IEngine CreateEngine() => new TeslaEngine();
+
+        public IChassis CreateChassis() => new TeslaChassis();
+    }
+
+    public class FordFactory : ICarFactory
+    {
+        public IEngine CreateEngine() => new FordEngine();
+        public IChassis CreateChassis() => new FordChassis();
+    }
+
+    public class CarManufacturer(ICarFactory factory)
+    {
+        private readonly IEngine _engine = factory.CreateEngine();
+        private readonly IChassis _chassis = factory.CreateChassis();
+
+        public string AssembleCar()
         {
-            return new BelgiumDiscountService();
-        }
-
-        public IShippingCostsService CreateShippingCostsService()
-        {
-            return new BelgiumShippingCostsService();
-        }
-    }
-
-    public class FranceShoppingCartPurchaseFactory : IShoppingCartPurchaseFactory
-    {
-        public IDiscountService CreateDiscountService()
-        {
-            return new FranceDiscountService();
-        }
-
-        public IShippingCostsService CreateShippingCostsService()
-        {
-            return new FranceShippingCostsService();
-        }
-    }
-
-    public class ShoppingCart
-    {
-        private readonly IDiscountService _discountService;
-        private readonly IShippingCostsService _shippingCostsService;
-        private int _orderCosts;
-
-        // Constructor
-        public ShoppingCart(IShoppingCartPurchaseFactory factory)
-        {
-            _discountService = factory.CreateDiscountService();
-            _shippingCostsService = factory.CreateShippingCostsService();
-            // assume that the total cost of all the items we ordered = 200 euro
-            _orderCosts = 200;
-        }
-
-        public void CalculateCosts()
-        {
-            Console.WriteLine($"Total costs = {_orderCosts - (_orderCosts / 100 * _discountService.DiscountPercentage) + _shippingCostsService.ShippingCosts}");
+            return $"Assembled a car with {_engine.GetEngineType()} and {_chassis.GetChassisType()}";
         }
     }
 }
